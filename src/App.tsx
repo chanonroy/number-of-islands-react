@@ -6,37 +6,37 @@ import countIslands from './utils/count-islands'
 export default function App() {
   const [islandState, setIslandState] = useState<{
     board: number[][]
-    islands: number
+    count: number
   }>({
     board: [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ],
-    islands: 0,
+    count: 0,
   })
 
-  const { board, islands } = islandState
+  const { board, count } = islandState
 
-  const handleBoardUpdate = async (
-    row: number,
-    col: number,
-    newValue: number
-  ) => {
-    // deep copy matrix
-    const newBoard = board.map((arr) => arr.slice())
-    newBoard[row][col] = newValue
-
+  const handleBoardUpdate = async (newBoard: number[][]) => {
     setIslandState({
       board: newBoard,
-      islands: countIslands(newBoard),
+      count: countIslands(newBoard),
     })
   }
 
   return (
-    <Container>
-      <Board board={board} onClick={handleBoardUpdate} />
-      <div style={{ display: 'flex', justifyContent: 'center' }}>{islands}</div>
+    <Container style={{ paddingTop: 40 }}>
+      <div style={{ marginBottom: 20 }}>
+        <Board board={board} onClick={handleBoardUpdate} />
+      </div>
+      <div
+        style={{ display: 'flex', justifyContent: 'center', color: 'white' }}
+      >
+        {count === 1
+          ? `There is ${count} island`
+          : `There are ${count} islands`}
+      </div>
     </Container>
   )
 }

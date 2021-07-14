@@ -17,7 +17,7 @@ const StyledColumn = styled.div<{ isIsland: boolean }>`
   transition: all 0.3s ease;
 
   &:hover {
-    border: 1px solid lightgrey;
+    opacity: 0.75;
   }
 `
 
@@ -26,8 +26,16 @@ export default function Board({
   onClick,
 }: {
   board: number[][]
-  onClick: (row: number, col: number, newValue: number) => void
+  onClick: (newBoard: number[][]) => void
 }) {
+  const handleBoardChange = (row: number, col: number, newValue: number) => {
+    // deep copy matrix
+    const newBoard = board.map((arr) => arr.slice())
+    newBoard[row][col] = newValue
+
+    onClick(newBoard)
+  }
+
   return (
     <>
       {board.map((row, rowIdx) => {
@@ -39,7 +47,9 @@ export default function Board({
                 <StyledColumn
                   key={colIdx}
                   isIsland={isIsland}
-                  onClick={() => onClick(rowIdx, colIdx, isIsland ? 0 : 1)}
+                  onClick={() =>
+                    handleBoardChange(rowIdx, colIdx, isIsland ? 0 : 1)
+                  }
                 />
               )
             })}
